@@ -34,17 +34,18 @@ app.get("/", (req, res) => {
 
 // get the values
 app.get("/values/all", async (req, res) => {
-  const values = await pgClient.query("SELECT * FROM questions");
-
+  // const values = await pgClient.query("SELECT * FROM questions");
+  console.log("Hit the values endpoint")
   res.send(values);
 });
 
 // now the post -> insert value
 app.post("/values", async (req, res) => {
-  if (!req.body.value) res.send({ working: false });
+//   if (!req.body.value) res.send({ working: false });
 
-  pgClient.query("INSERT INTO questions(question_no) VALUES(1)", [req.body.value]);
+//   pgClient.query("INSERT INTO questions(question_no) VALUES(1)", [req.body.value]);
 
+  console.log("HIT THE POST ENDPINT")
   res.send({ working: true });
 });
 
