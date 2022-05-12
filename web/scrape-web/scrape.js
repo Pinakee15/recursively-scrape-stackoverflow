@@ -74,7 +74,7 @@ async function getCurrentPageJobData(html) {
 
   // Get the total upvotes 
   $('.js-vote-count').each((i,ele)=>{
-        // console.log("Total number of upvotes : ", $(this).text());
+    console.log("Total number of upvotes : ", $(ele).attr('data-value'));
   })
 
   // Find total answers 
