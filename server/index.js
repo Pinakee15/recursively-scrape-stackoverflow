@@ -9,7 +9,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const portNumber = 4000
+// Redis 
+const redis = require('redis');
+const redisClient = redis.createClient({
+  host: 'redis',
+  port: 6379
+});
 
 // Postgres client setup
 const { Pool } = require("pg");
@@ -23,7 +28,7 @@ const pgClient = new Pool({
 
 pgClient.on("connect", client => {
   client
-    .query("CREATE TABLE IF NOT EXISTS questions (question_no INT)")
+    .query("CREATE TABLE IF NOT EXISTS values (number INT)")
     .catch(err => console.log("PG ERROR", err));
 });
 
@@ -34,21 +39,30 @@ app.get("/", (req, res) => {
 
 // get the values
 app.get("/values/all", async (req, res) => {
-  // const values = await pgClient.query("SELECT * FROM questions");
-  console.log("Hit the values endpoint")
+  const values = await pgClient.query("SELECT * FROM values");
+
   res.send(values);
+  redisClient.get('numVisits', function(err, numVisits) {
+    numVisitsToDisplay = parseInt(numVisits) + 1;
+    console.log("We have done it : ", parseInt(numVisits))
+    if (isNaN(numVisitsToDisplay)) {
+        numVisitsToDisplay = 1;
+    }
+   res.send(os.hostname() +': Number of visits is: ' + numVisitsToDisplay);
+    numVisits++;
+    redisClient.set('numVisits', numVisits);
+  });
 });
 
 // now the post -> insert value
 app.post("/values", async (req, res) => {
-//   if (!req.body.value) res.send({ working: false });
+  if (!req.body.value) res.send({ working: false });
 
-//   pgClient.query("INSERT INTO questions(question_no) VALUES(1)", [req.body.value]);
+  pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
 
-  console.log("HIT THE POST ENDPINT")
   res.send({ working: true });
 });
 
-app.listen(4000, err => {
+app.listen(5000, err => {
   console.log("Listening");
 });

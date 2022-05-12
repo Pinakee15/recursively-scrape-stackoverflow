@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-const TestComponent = () => {
+const OtherPage = () => {
   return (
     <div>
-      I'm on tet component
+      I'm an other page!
       <br />
       <br />
       <Link to="/">Go back to home screen</Link>
@@ -11,4 +11,4 @@ const TestComponent = () => {
   );
 };
 
-export default TestComponent;
+export default OtherPage;

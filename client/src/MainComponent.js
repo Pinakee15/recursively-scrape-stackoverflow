@@ -1,14 +1,15 @@
 import { useCallback, useState, useEffect } from "react";
 import axios from "axios";
-import "./Dashboard.css";
+import "./MainComponent.css";
 
-const Dashboard = () => {
+const MainComponent = () => {
   const [values, setValues] = useState([]);
   const [value, setValue] = useState("");
 
   const getAllNumbers = useCallback(async () => {
     // we will use nginx to redirect it to the proper URL
-    const data = await axios.get("/api/values/all");
+    const data = await axios.get("/api/get");
+    console.log("This is the date :  ", data)
     setValues(data.data.rows.map(row => row.number));
   }, []);
 
@@ -54,4 +55,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default MainComponent;

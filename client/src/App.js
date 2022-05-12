@@ -1,24 +1,21 @@
 import { Fragment } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import TestComponent from "./TestComponent";
-import Dashboard from "./Dashboard";
+import OtherPage from "./OtherPage";
+import MainComponent from "./MainComponent";
 
 function App() {
   return (
     <Router>
       <Fragment>
         <header className="header">
-          <div>Scrape Stackoverflow</div>
-          <div>
-            <Link to="/">Dashboard</Link>
-            <Link to="/about">About</Link>
-          </div>
-
+          <div>This is a multicontainer application</div>
+          <Link to="/">Home</Link>
+          <Link to="/otherpage">Other page</Link>
         </header>
         <div className="main">
-          <Route exact path="/" component={Dashboard} />
-          <Route path="/about" component={TestComponent} />
+          <Route exact path="/" component={MainComponent} />
+          <Route path="/otherpage" component={OtherPage} />
         </div>
       </Fragment>
     </Router>
