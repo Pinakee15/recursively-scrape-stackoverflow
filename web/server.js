@@ -61,14 +61,14 @@ app.get('/get', async function(req, res) {
     });
 });
 
-app.post("/values", async (req, res) => {
+app.post("/start_scrape", async (req, res) => {
     if (!req.body.value) res.send({ working: false });
-  
-    pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
+    let recursion_depth = req.body.value
+    console.log("This is recursion height : ", recursion_depth)
+    // pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
   
     res.send({ working: true });
   });
-
 
 
 app.listen(5000, function() {
