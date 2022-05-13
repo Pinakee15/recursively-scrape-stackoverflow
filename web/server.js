@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 
+const scrapeData = require('./scrape-web/scrape');
 // Middlewares
 
 app.use(bodyParser.json());
@@ -61,11 +62,14 @@ app.get('/get', async function(req, res) {
     });
 });
 
+scrapeData.scrapeData("https://stackoverflow.com/questions?tab=newest&page=9999")
+
 app.post("/start_scrape", async (req, res) => {
     if (!req.body.value) res.send({ working: false });
     let recursion_depth = req.body.value
     console.log("This is recursion height : ", recursion_depth)
     // pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
+    scrapeData()
   
     res.send({ working: true });
   });

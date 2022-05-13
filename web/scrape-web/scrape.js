@@ -79,8 +79,8 @@ async function getCurrentPageJobData(html) {
 }
 
 // scrapeData("https://stackoverflow.com/questions");
-scrapeData("https://stackoverflow.com/questions?tab=newest&page=9999")
+// scrapeData("https://stackoverflow.com/questions?tab=newest&page=9999")
 
 module.exports = {
-    initiateHeadlessBrowser
+  scrapeData
 }
