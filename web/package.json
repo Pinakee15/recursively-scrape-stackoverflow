@@ -9,7 +9,9 @@
   "dependencies": {
     "express": "^4.17.2",
     "pg": "^8.7.3",
-    "redis": "3.1.2"
+    "redis": "3.1.2",
+    "cheerio": "^1.0.0-rc.10",
+    "puppeteer": "^14.0.0"
   },
   "author": "",
   "license": "MIT"

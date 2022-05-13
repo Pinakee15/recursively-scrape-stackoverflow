@@ -21,22 +21,6 @@ async function initiateHeadlessBrowser(){
     return browser;
 } 
 
-// async function scrapeData(url) {
-//   const browser = await initiateHeadlessBrowser();
-//   const page = await browser.newPage();
-//   await page.goto(url, { waitUntil: "networkidle0" });
-//   await page.waitForSelector(".listResults");
-//   const content = await page.content();
-//   const links = await getJobData(content);
-//   for(let link of links) {
-//     await page.goto(`https://stackoverflow.com${link}`);
-//     await page.waitForSelector('.job-details--header');
-//     const pageContent = await page.content();
-//     await getCurrentPageJobData(pageContent);
-//   }
-//   await browser.close();
-// }
-
 async function scrapeData(url){
   const browser = await initiateHeadlessBrowser();
   const page = await browser.newPage();

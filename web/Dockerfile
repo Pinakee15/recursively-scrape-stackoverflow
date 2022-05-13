@@ -1,4 +1,8 @@
-FROM node:14.17.3-alpine3.14
+FROM node:16-alpine
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+RUN apk add chromium
 
 WORKDIR /usr/src/app
 
