@@ -5,16 +5,12 @@ import "./MainComponent.css";
 const MainComponent = () => {
   const [values, setValues] = useState([]);
   const [value, setValue] = useState("");
-  let hostname = ''
-
+  console.log("entered")
   const getAllNumbers = useCallback(async () => {
     // we will use nginx to redirect it to the proper URL
     const data = await axios.get("/api/get");
-    console.log("This is the date :  ", data)
-    setValues(data.data.rows.map(row => row.number));
   }, []);
 
-  // Scrape Questions : 
   const scrapeQuestions = useCallback(
     async event => {
       event.preventDefault();
@@ -28,7 +24,6 @@ const MainComponent = () => {
     },
     [value, getAllNumbers]
   );
-
 
   useEffect(() => {
     getAllNumbers();
@@ -44,8 +39,8 @@ const MainComponent = () => {
           <div className="value">{value}</div>
         ))}
       </div>
-      <form className="form" onSubmit={scrapeQuestions}>
-        <label>Select recursion depth : </label>
+      <form className="form" onSubmit={saveNumber}>
+        <label>Enter your value: </label>
         <input
           value={value}
           onChange={event => {

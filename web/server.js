@@ -38,41 +38,65 @@ const pgClient = new Pool({
   port: keys.pgPort
 });
 
-pgClient.on("connect", client => {
-    client
-      .query("CREATE TABLE IF NOT EXISTS values (number INT)")
-      .catch(err => console.log("PG ERROR", err));
+pgClient.on("connect", async client => {
+    console.log("Connected to data : :")
+    await client.query(`CREATE TABLE IF NOT EXISTS so_questions
+            (que_id integer PRIMARY KEY, que_url text ,upvotes integer, ref_count integer, total_ans integer);
+        `)
   });
 
 
+// app.get('/get', async function(req, res) {
+//     redisClient.get('numVisits', async function(err, numVisits) {
+//         numVisitsToDisplay = parseInt(numVisits) + 1;
+//         if (isNaN(numVisitsToDisplay)) {
+//             numVisitsToDisplay = 1;
+//         }
+//     //    res.send(': Number of visits is: ' + numVisitsToDisplay);
+
+//         const values = await pgClient.query("SELECT * FROM values");
+//         res.send(values);
+
+//         numVisits++;
+//         console.log("Redis and postgres working fine together : ", numVisits)
+//         redisClient.set('numVisits', numVisits);
+//     });
+// });
+
 app.get('/get', async function(req, res) {
-    redisClient.get('numVisits', async function(err, numVisits) {
-        numVisitsToDisplay = parseInt(numVisits) + 1;
-        if (isNaN(numVisitsToDisplay)) {
-            numVisitsToDisplay = 1;
-        }
-    //    res.send(': Number of visits is: ' + numVisitsToDisplay);
-
-        const values = await pgClient.query("SELECT * FROM values");
-        res.send(values);
-
-        numVisits++;
-        console.log("Redis and postgres working fine together : ", numVisits)
-        redisClient.set('numVisits', numVisits);
-    });
+    console.log("Got the request : : : ",)
+    const values = await pgClient.query("SELECT * FROM so_questions;");
+    console.log("Values inside databae : ", values.rows)
+    res.send(values.rows)
 });
 
 scrapeData.scrapeData("https://stackoverflow.com/questions?tab=newest&page=9999")
+
+// app.post("/start_scrape", async (req, res) => {
+//     if (!req.body.value) res.send({ working: false });
+//     let recursion_depth = req.body.value
+//     console.log("This is recursion height : ", recursion_depth)
+//     // pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
+//     scrapeData()
+  
+//     res.send({ working: true });
+//   });
 
 app.post("/start_scrape", async (req, res) => {
     if (!req.body.value) res.send({ working: false });
     let recursion_depth = req.body.value
     console.log("This is recursion height : ", recursion_depth)
-    // pgClient.query("INSERT INTO values(number) VALUES($1)", [req.body.value]);
-    scrapeData()
-  
+    pgClient.query(`INSERT INTO 
+        so_questions(que_id , que_url, upvotes, ref_count, total_ans)
+        VALUES(1, 'google.com', 3, 7, 5)`
+    , (err, res)=>{
+        console.log("ERROR WHILE INSERTING DATA", err)
+    });
+
+    // scrapeData()
+
     res.send({ working: true });
-  });
+});
 
 
 app.listen(5000, function() {

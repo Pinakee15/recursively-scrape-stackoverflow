@@ -1,27 +1,8 @@
-// const launcher = require("./browser");
-// launcher(); 
-
-const puppeteer = require('puppeteer');
+const initiateBrowser = require("./initiate-browser")
 const cheerio = require("cheerio");
 
-
-async function initiateHeadlessBrowser(){
-    let browser;
-    try{
-        console.log("Browser opened ...");
-        browser = await puppeteer.launch({ 
-          executablePath: '/usr/bin/chromium-browser', 
-          args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] })
-    }
-
-    catch(err){
-        console.log("Error setting up chrome : ",err);
-    }
-    return browser;
-} 
-
 async function scrapeData(url){
-  const browser = await initiateHeadlessBrowser();
+  const browser = await initiateBrowser.initiateHeadlessBrowser();
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "networkidle0" });
   await page.waitForSelector("#questions");
