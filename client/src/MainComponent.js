@@ -39,7 +39,7 @@ const MainComponent = () => {
           <div className="value">{value}</div>
         ))}
       </div>
-      <form className="form" onSubmit={saveNumber}>
+      <form className="form" onSubmit={scrapeQuestions}>
         <label>Enter your value: </label>
         <input
           value={value}
