@@ -4,9 +4,10 @@ async function initiateHeadlessBrowser(){
     let browser;
     try{
         console.log("Browser opened ...");
-        browser = await puppeteer.launch({ 
-          executablePath: '/usr/bin/chromium-browser', 
-          args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] })
+        browser = await puppeteer.launch({
+            headless : true,
+            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        })
     }
 
     catch(err){
