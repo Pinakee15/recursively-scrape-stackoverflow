@@ -6,11 +6,14 @@ const getDataFromDb = async (query)=>{
 }
 
 const postDataToDb = async (value)=>{
-    await dbClient.pgClient.query(`INSERT INTO 
-        so_questions(que_id , que_url, upvotes, ref_count, total_ans)
-        VALUES(6, 'google.com', 3, 7, 5)`
-    , (err, res)=>{
-        console.log(err);
+    
+    await dbClient.pgClient.query(
+        `INSERT INTO 
+         so_questions(que_id , que_url, upvotes, ref_count, total_ans)
+         VALUES(${value?.question_id}, '${value?.question_url}', ${value?.total_upvotes},
+                  ${value?.reference_count}, ${value?.total_answers})`    
+        , (err, res)=>{
+        if(err) console.log(err);
     });  
 }
 

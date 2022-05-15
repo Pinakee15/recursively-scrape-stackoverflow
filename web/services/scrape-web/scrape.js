@@ -1,5 +1,6 @@
 const initiateBrowser = require("./initiate-browser")
 const cheerio = require("cheerio");
+const dbOperation = require('../crud/crud.service');
 
 totalQuestionsScaped = 0
 
@@ -31,7 +32,7 @@ async function scrapeOuestions(url){
     let url = `https://stackoverflow.com${link}`;
     totalQuestionsScaped += 1
     console.log("Total questions scraped : ", totalQuestionsScaped)
-    goToQuestionPage(url , page)
+    goToQuestionPage(url , page)    
   }
 }
 
@@ -42,7 +43,7 @@ async function goToQuestionPage(url,page){
   let finalData = await getCurrentPageJobData(pageContent, url, page);
   console.log("This is the scraped data : ", finalData)
   console.log("----------------------")
-
+  await dbOperation.postDataToDb(finalData);
   // After finding current question's scraped data, traverse to the related quesions links associated with this questions
   finalData?.allRelatedQuestionsLinks.forEach(async (url,i)=>{
     goToQuestionPage(url , page);
@@ -56,13 +57,16 @@ async function getCurrentPageJobData(html, url, page) {
   let scrapedData = {};
   let allRelatedQuestionsLinks = []
   scrapedData['question_url'] = url;
+  // Taking the primary key from the question number in the url of the question
+  scrapedData['question_id'] = parseInt(url.split("/")[4]);
   scrapedData['reference_count'] = 0;
   const $ = cheerio.load(html);
 
   // Get the total upvotes 
   $('.js-vote-count').each((i,ele)=>{
     if(i == 0){
-      scrapedData['total_upvotes'] = $(ele).attr('data-value')
+      scrapedData['total_upvotes'] = parseInt($(ele).attr('data-value'));
+      return;
     }
   })
 

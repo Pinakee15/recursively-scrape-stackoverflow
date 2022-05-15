@@ -2,12 +2,12 @@ const { Pool } = require("pg");
 const keys = require('../env/development.keys');
 
 const pgClient = new Pool({
-    user: keys.pgUser,
-    host: keys.pgHost,
-    database: keys.pgDatabase,
-    password: keys.pgPassword,
-    port: keys.pgPort
-  });
+  user: keys.pgUser,
+  host: keys.pgHost,
+  database: keys.pgDatabase,
+  password: keys.pgPassword,
+  port: keys.pgPort
+});
 
 // Set up the App table if it doesnt exist
 pgClient.on("connect", async client => {
