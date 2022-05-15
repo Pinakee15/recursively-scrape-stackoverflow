@@ -8,7 +8,7 @@ const MainComponent = () => {
   console.log("entered")
   const getAllNumbers = useCallback(async () => {
     // we will use nginx to redirect it to the proper URL
-    const data = await axios.get("/api/get");
+    const data = await axios.get("/api/get_scraped_data");
   }, []);
 
   const scrapeQuestions = useCallback(
@@ -40,7 +40,7 @@ const MainComponent = () => {
         ))}
       </div>
       <form className="form" onSubmit={scrapeQuestions}>
-        <label>Enter your value: </label>
+        <label>Enter recursion depth : </label>
         <input
           value={value}
           onChange={event => {
