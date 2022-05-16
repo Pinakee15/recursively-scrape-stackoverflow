@@ -1,4 +1,4 @@
-const initiateBrowser = require("./initiate-browser")
+const initiateBrowser = require("./initiate-browser.webscrape")
 const cheerio = require("cheerio");
 const dbOperation = require('../crud/crud.service');
 
