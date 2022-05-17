@@ -20,7 +20,8 @@ async function scrapeOuestions(url , recursionDepth , resumeScaping){
   const content = await page.content();
   const links = await scrapeFrontPageQuestions(content);
 
-  // CALL 5 TOP QUESTIONS CONCURRENTLY WHICH WILL ACT TOP NODE FOR EACH RECURSION TREE
+  // ******  CALL 5 TOP QUESTIONS CONCURRENTLY WHICH WILL ACT TOP NODE FOR EACH RECURSION TREE  ******
+  
   for(let link of links.slice(0,5)) {
     let url = `https://stackoverflow.com${link}`;
     goToQuestionPage(url , page , recursionDepth)    
@@ -42,11 +43,12 @@ async function scrapeFrontPageQuestions(html) {
 async function goToQuestionPage(url,page , recursionDepth){
   // IF THE RECURSION HEIGHT REACHES 0 , THEN MOVE TO SIBLING QUESTION (NODE) OF THE RECURSION 
   // TREE INSTEAD OF GOING FURTHER DOWN THE RECURSION TREE
+  
   console.log("Recursion height : ", recursionDepth);
   if(recursionDepth == 0){
     return
   }
-  // await page.goto(url);
+
   await page.goto(url, { waitUntil: "networkidle0" });
   await page.waitForSelector('#content');
   const pageContent = await page.content();
@@ -54,6 +56,7 @@ async function goToQuestionPage(url,page , recursionDepth){
   console.log("This is the scraped data : ", finalData)
   console.log("----------------------")
   await dbOperation.postDataToDb(finalData);
+
   // After finding current question's scraped data, traverse to the related quesions links associated with this questions
   finalData?.allRelatedQuestionsLinks.forEach(async (url,i)=>{
     goToQuestionPage(url , page , recursionDepth-1);
@@ -66,6 +69,7 @@ async function getCurrentPageJobData(html, url, page) {
   let scrapedData = {};
   let allRelatedQuestionsLinks = []
   scrapedData['question_url'] = url;
+  
   // Taking the primary key from the question number in the url of the question
   scrapedData['question_id'] = parseInt(url.split("/")[4]);
   scrapedData['reference_count'] = 0;

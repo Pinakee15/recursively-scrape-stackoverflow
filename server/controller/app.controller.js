@@ -6,7 +6,7 @@ const scrape = require("../services/webscrape/app.webscrape")
 // Get the scraped questions stored in DB
 const getScrapedData = async (req, res)=> {
     let query = "SELECT * FROM so_questions;"
-    const values = await crudOperation.getDataFromDb(query) //await dbClient.pgClient.query("SELECT * FROM so_questions;");
+    const values = await crudOperation.getDataFromDb(query);
     res.send(values.rows)
 }
 
@@ -21,7 +21,6 @@ const resumeScraping = async (req, res)=>{
     let url = question?.que_url;
     console.log("start scraping ..")
     scrape.scrapeOuestions(url, recursionDepth , true);
-    // scrape.scrapeOuestions("https://stackoverflow.com/questions" , recursionDepth);
 }
 
 const deleteAQuestion = async(req,res)=>{
@@ -38,6 +37,7 @@ const getLastQuestion = async(req, res)=>{
     return lastQuestion.rows[0];
 }
 
+// Sample api to prefill database
 const postScrappedDataToDb = async (req, res)=>{    
     let val = req.body.value;
     console.log("This is the value : ", val)

@@ -8,8 +8,6 @@ const MainComponent = () => {
   const [value, setValue] = useState("");
   console.log("entered")
   const getAllNumbers = useCallback(async () => {
-    // we will use nginx to redirect it to the proper URL
-    // const quesions = await axios.get("http://localhost:4000/get_scraped_data"); get_last_question
     const quesions = await axios.get("http://localhost:4000/get_scraped_data");
     setQuestions(quesions.data)
     console.log(quesions.data)
@@ -17,8 +15,6 @@ const MainComponent = () => {
   
   const startScraping = useCallback(
     async event => {
-      event.preventDefault();
-      console.log("DEPTH : ", value)
       if(value <100){
         setShowError(true);
         return;
@@ -28,7 +24,6 @@ const MainComponent = () => {
       });
 
       setValue("");
-      // getAllNumbers();
     },
     [value, getAllNumbers]
   );
@@ -46,7 +41,6 @@ const MainComponent = () => {
       });
 
       setValue("");
-      // getAllNumbers();
     },
     [value, getAllNumbers]
   );
