@@ -2,7 +2,30 @@ const initiateBrowser = require("./initiate-browser.webscrape")
 const cheerio = require("cheerio");
 const dbOperation = require('../crud/crud.service');
 
-totalQuestionsScaped = 0
+
+async function scrapeOuestions(url , recursionDepth , resumeScaping){
+
+  const browser = await initiateBrowser.initiateHeadlessBrowser();
+  const page = await browser.newPage();
+  await page.setDefaultNavigationTimeout(0);
+
+  if(resumeScaping){
+    goToQuestionPage(url , page , recursionDepth);
+    return;
+  }
+
+  await page.goto(url, { waitUntil: "networkidle0" });
+  await page.waitForSelector("#questions");
+
+  const content = await page.content();
+  const links = await scrapeFrontPageQuestions(content);
+
+  // CALL 5 TOP QUESTIONS CONCURRENTLY WHICH WILL ACT TOP NODE FOR EACH RECURSION TREE
+  for(let link of links.slice(0,5)) {
+    let url = `https://stackoverflow.com${link}`;
+    goToQuestionPage(url , page , recursionDepth)    
+  }
+}
 
 async function scrapeFrontPageQuestions(html) {
   const links = [];
@@ -16,28 +39,15 @@ async function scrapeFrontPageQuestions(html) {
   return links;
 }
 
-async function scrapeOuestions(url){
-  const browser = await initiateBrowser.initiateHeadlessBrowser();
-  const page = await browser.newPage();
-  await page.setDefaultNavigationTimeout(0);
-  await page.goto(url, { waitUntil: "networkidle0" });
-  await page.waitForSelector("#questions");
-
-  const content = await page.content();
-  const links = await scrapeFrontPageQuestions(content);
-  console.log("THESE ARE LIST OF LINKS :- ", links)
-  console.log("================================")
-  // Go to each specific question 
-  for(let link of links.slice(0,1)) {
-    let url = `https://stackoverflow.com${link}`;
-    totalQuestionsScaped += 1
-    console.log("Total questions scraped : ", totalQuestionsScaped)
-    goToQuestionPage(url , page)    
+async function goToQuestionPage(url,page , recursionDepth){
+  // IF THE RECURSION HEIGHT REACHES 0 , THEN MOVE TO SIBLING QUESTION (NODE) OF THE RECURSION 
+  // TREE INSTEAD OF GOING FURTHER DOWN THE RECURSION TREE
+  
+  if(recursionDepth == 0){
+    return
   }
-}
-
-async function goToQuestionPage(url,page){
-  await page.goto(url);
+  // await page.goto(url);
+  await page.goto(url, { waitUntil: "networkidle0" });
   await page.waitForSelector('#content');
   const pageContent = await page.content();
   let finalData = await getCurrentPageJobData(pageContent, url, page);
@@ -46,8 +56,7 @@ async function goToQuestionPage(url,page){
   await dbOperation.postDataToDb(finalData);
   // After finding current question's scraped data, traverse to the related quesions links associated with this questions
   finalData?.allRelatedQuestionsLinks.forEach(async (url,i)=>{
-    goToQuestionPage(url , page);
-    // page.goto(url);
+    goToQuestionPage(url , page , recursionDepth-1);
   })
 
   return finalData
@@ -82,19 +91,14 @@ async function getCurrentPageJobData(html, url, page) {
   related_questions = 0;
 
   $('.related').children('.spacer').each(async (i,ele)=>{
-    // console.log("Related question ....", i, $(ele).find('a').attr('href'))
     let related_question_url = $(ele).children('.question-hyperlink').attr('href')
-    // console.log("Related links : ", related_question_url)
     allRelatedQuestionsLinks.push(related_question_url)
     related_questions += 1;
 
   })
   scrapedData['allRelatedQuestionsLinks'] = allRelatedQuestionsLinks;
-  // console.log("Related question links for this question : ", allRelatedQuestionsLinks)
   return scrapedData;
 }
-
-// scrapeOuestions("https://stackoverflow.com/questions")
 
 module.exports = {
   scrapeOuestions

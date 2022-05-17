@@ -1,5 +1,20 @@
 .header {
-  background: #eee;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  padding: 23px 43px;
+  color: white;
+  border-bottom: 8px solid floralwhite;
+}
+
+.header-logo{
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.menu{
+  color: white !important;
+  text-decoration: none !important;
 }
 
 .header a {
@@ -7,6 +22,5 @@
 }
 
 .main {
-  padding: 10px;
-  background: #ccc;
+
 }
