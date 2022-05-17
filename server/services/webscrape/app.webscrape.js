@@ -42,7 +42,7 @@ async function scrapeFrontPageQuestions(html) {
 async function goToQuestionPage(url,page , recursionDepth){
   // IF THE RECURSION HEIGHT REACHES 0 , THEN MOVE TO SIBLING QUESTION (NODE) OF THE RECURSION 
   // TREE INSTEAD OF GOING FURTHER DOWN THE RECURSION TREE
-  
+  console.log("Recursion height : ", recursionDepth);
   if(recursionDepth == 0){
     return
   }

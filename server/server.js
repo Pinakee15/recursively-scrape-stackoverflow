@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors')
 
 const AppRouter = require('./router/app.router')
-const PORT = 5000;
+const PORT = 4000;
 
 // Middlewares
 app.use(cors())

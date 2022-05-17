@@ -10,7 +10,7 @@ const MainComponent = () => {
   const getAllNumbers = useCallback(async () => {
     // we will use nginx to redirect it to the proper URL
     // const quesions = await axios.get("http://localhost:4000/get_scraped_data"); get_last_question
-    const quesions = await axios.get("/api/get_scraped_data");
+    const quesions = await axios.get("http://localhost:4000/get_scraped_data");
     setQuestions(quesions.data)
     console.log(quesions.data)
   }, []);
@@ -23,7 +23,7 @@ const MainComponent = () => {
         setShowError(true);
         return;
       }
-      await axios.post("/api/start_scraping", {
+      await axios.post("http://localhost:4000/start_scraping", {
         value
       });
 
@@ -41,7 +41,7 @@ const MainComponent = () => {
         setShowError(true);
         return;
       }
-      await axios.post("http://localhost:5000/resume_scraping", {
+      await axios.post("http://localhost:4000/resume_scraping", {
         value
       });
 
@@ -76,8 +76,8 @@ const MainComponent = () => {
                   true
               )}
             <div className="button-container">
-              <button>Start scraping from start</button>
-              <button>Resume scraping</button>
+              <button onClick={startScraping}>Start scraping from start</button>
+              <button onClick={resumeScraping} >Resume scraping</button>
             </div>
             <code><b>NOTE :</b>Scrape for period of 1 min or less and with a gap of 15-20 sec in btw to avoid possibility of IP blocking </code>
           </div>
