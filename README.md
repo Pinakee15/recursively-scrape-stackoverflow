@@ -2,8 +2,6 @@
 
 ## Node.js, React application with Nginx proxy and Redis and Postgres database
 
-### Note : In current version of project scapping library doesnt work properly so you have spin up code locally for all instances
-
 ### How to set up the project
 #### - Open redis server on your local using command redis-server (On mac/linux) on default port 6379
 #### - Open postgres server on the default port
